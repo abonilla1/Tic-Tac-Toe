@@ -36,7 +36,7 @@ let playerTurn = null; //this variable will be initialized by initialize functio
 /*----------------------------- Event Listeners -----------------------------*/
 
 document.querySelector('.board').addEventListener('click', handleClick)
-//document.querySelector('reset').addEventListener('click', initialize)
+
 
 /*-------------------------------- Functions -------------------------------*/
 
@@ -46,6 +46,9 @@ function initialize() {
     isWinner = null;
     board = [null, null, null, null, null, null, null, null, null];
     playerTurn = 1;
+    squares.forEach((element) => {
+        element.innerHTML = '';
+    })
     render();
 }
 
@@ -56,47 +59,57 @@ function changeColor(element, index) {
 function render() {
     board.forEach((element, index) => { 
         changeColor(element, index);
-    })
-//     if (isWinner) {
-//         if (isWinner === 1) {
-//             messageOutput.innerHTML = "Congratulations Player X! You Won!";
-//         }  else if (isWinner === -1) {
-//             messageOutput.innerHTML = "Congratulations Player O! You Won!";
-//         } else {
-//             messageOutput.innerHTML = "No Winner!";
-//         }
-//     }
-}
-//   
-
-function checkIndex(board, index) {
-    if( board[index+1] === board[index+2] === board[index+3]){
-         return (board[index] * 3);
-    } else if (board[index] === board[index+3] === board[index+6]) {
-        return (board[index] * 3);
-    } else if (board[index] === board[index+4] === board[index+8]) {
-        return (board[index] * 3);
-    } else if (board[index] === board[index+2] === board[index+4]) {
-        return (board[index] * 3);
-    } else {
-        return 0;
+    });
+    if (isWinner === 'T') {
+        messageOutput.innerHTML = "CaTs GaMe!";
+    }  
+    else if (isWinner) {
+        messageOutput.innerHTML = `Congrats ${colors[isWinner].toUpperCase()} You Won!`;
+    } 
+    else {
+        messageOutput.innerHTML = `${colors[playerTurn].toUpperCase()}'s Turn`;
     }
 }
 
+//   
+
+// function checkIndex(board, index) {
+//     if( board[index+1] === board[index+2] === board[index+3]){
+//          return (board[index] * 3);
+//     } else if (board[index] === board[index+3] === board[index+6]) {
+//         return (board[index] * 3);
+//     } else if (board[index] === board[index+4] === board[index+8]) {
+//         return (board[index] * 3);
+//     } else if (board[index] === board[index+2] === board[index+4]) {
+//         return (board[index] * 3);
+//     } else {
+//         return 0;
+//     }
+// }
+
 function getWinner() {
-    let winInt = null;
-    board.forEach((element, index) => {
-        winInt = checkIndex(element, index);
-            if (winInt === 3) {
-                return 1;
-            } else if (winInt === -3) {
-                return -1;
-            } else {
-                return null;
-            }
-
-    })
-
+    for (let i = 0; i < winningPattern.length; i++){
+    // let winInt = null;
+    // board.forEach((element, index) => {
+    //     winInt = checkIndex(element, index);
+    //         if (winInt === 3) {
+    //             return 1;
+    //         } else if (winInt === -3) {
+    //             return -1;
+    //         } else {
+    //             return null;
+    //         }
+        if (Math.abs(board[0] + board[1] + board[2]) === 3) return board[0];
+        if (Math.abs(board[3] + board[4] + board[5]) === 3) return board[3];
+        if (Math.abs(board[6] + board[7] + board[8]) === 3) return board[6];
+        if (Math.abs(board[0] + board[3] + board[6]) === 3) return board[0];
+        if (Math.abs(board[1] + board[4] + board[7]) === 3) return board[1];
+        if (Math.abs(board[2] + board[5] + board[8]) === 3) return board[2];
+        if (Math.abs(board[0] + board[4] + board[8]) === 3) return board[0];
+        if (Math.abs(board[2] + board[4] + board[6]) === 3) return board[2];
+        if (board.includes(null)) return null;
+        return 'T';
+    }
 }
 
 function handleClick(click) {
@@ -124,3 +137,4 @@ function handleClick(click) {
 }
    
 initialize();
+document.getElementById('reset').addEventListener('click', initialize)
