@@ -38,7 +38,7 @@ let playerTurn = null; //this variable will be initialized by initialize functio
 document.querySelector('.board').addEventListener('click', handleClick)
 //document.querySelector('reset').addEventListener('click', initialize)
 
-/*-------------------------------- Functions -------------------FUUUUUUCCCKCKK-------------*/
+/*-------------------------------- Functions -------------------------------*/
 
 // Initialization function: decides first turn, updates player, initializes board state
 function initialize() {
