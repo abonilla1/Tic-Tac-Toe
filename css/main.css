@@ -3,6 +3,19 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: 'Yesteryear', cursive;
+    font-size: 25px;
+    background-image: linear-gradient(to right top, #d055f2, #00a1ff, #00cdff, #00e7e2, #30f485);
+
+}
+
+h1 {
+    text-align: center;
+}
+
+#message {
+    font-family: 'Berkshire Swash', cursive;
+    text-align: center;
 }
 
 section.board {
@@ -19,4 +32,23 @@ div {
     font-size: 8vmin;
     text-align: center;
     vertical-align: middle;
+}
+
+#reset {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    border-radius: 12px;
+    background-color: gainsboro; /* Green */
+    border: 4px solid black;
+    color: black;
+    padding: 10px 10px;
+    font-family: 'Yesteryear', cursive;
+    font-size: 30px;
+    margin: 40px;
+    width: 20%;
+}
+
+#reset:hover {
+    background-color: #EE82EE;
 }

@@ -4,15 +4,13 @@ const player_X = 1;
 const player_O = -1;
 
 const colors = {     
-    null: 'lightgrey',
-    '1': 'green',
-    '-1': 'purple'
+    null: 'gainsboro',
+    '1': 'palegreen',
+    '-1': 'plum'
 }  //created object to represent square states based on color (empty, clicked)
 
 //defines the 8 winning patterns, nested array
 const winningPattern = [ [ 0, 1, 2], [ 3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ]; 
-
-// const board = [ sq0, sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8 ] //an array corresponding to the browser board?
 /*---------------------------- Variables (state) ----------------------------*/
 
 let isWinner; //this variable will be updated by checkForWinner function
@@ -46,10 +44,9 @@ function initialize() {
     isWinner = null;
     board = [null, null, null, null, null, null, null, null, null];
     playerTurn = 1;
-    squares.forEach((element) => {
-        element.innerHTML = '';
-    })
+    squares.forEach((idx) => {idx.innerHTML = ' ';})
     render();
+    stopConfetti();
 }
 
 function changeColor(element, index) {  
@@ -65,6 +62,7 @@ function render() {
     }  
     else if (isWinner) {
         messageOutput.innerHTML = `Congrats ${colors[isWinner].toUpperCase()} You Won!`;
+        confetti.start(5000);
     } 
     else {
         messageOutput.innerHTML = `${colors[playerTurn].toUpperCase()}'s Turn`;
@@ -75,13 +73,13 @@ function render() {
 
 // function checkIndex(board, index) {
 //     if( board[index+1] === board[index+2] === board[index+3]){
-//          return (board[index] * 3);
+//          return (board[index]);
 //     } else if (board[index] === board[index+3] === board[index+6]) {
-//         return (board[index] * 3);
+//         return (board[index]);
 //     } else if (board[index] === board[index+4] === board[index+8]) {
-//         return (board[index] * 3);
+//         return (board[index]);
 //     } else if (board[index] === board[index+2] === board[index+4]) {
-//         return (board[index] * 3);
+//         return (board[index]);
 //     } else {
 //         return 0;
 //     }
@@ -121,10 +119,10 @@ function handleClick(click) {
             } else {
                 board[i] = playerTurn
                     if(playerTurn === 1) {
-                        squares[i].innerHTML = 'X';
+                        squares[i].innerHTML = '🦄';
                     }
                     else {
-                        squares[i].innerHTML = 'O';
+                        squares[i].innerHTML = '🌈';
                     }
                playerTurn *= -1;
                isWinner = getWinner();
