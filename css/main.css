@@ -10,9 +10,11 @@ section.board {
     grid-template-rows: repeat(3, 10vmin);
     grid-template-columns: repeat(3, 10vmin);
     grid-gap: 0vmin;
+    justify-content: center;
 }
 
 div {
+
     border: 3px solid black;
     font-size: 8vmin;
     text-align: center;

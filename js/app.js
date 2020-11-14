@@ -4,36 +4,24 @@ const player_X = 1;
 const player_O = -1;
 
 const colors = {     
-    null: 'grey',
-    player_X: 'green',
-    player_O: 'purple'
+    null: 'lightgrey',
+    '1': 'green',
+    '-1': 'purple'
 }  //created object to represent square states based on color (empty, clicked)
 
-// Now to define the 8 winning patterns
-const winPattern1 = [ 0, 1, 2];
-const winPattern2 = [ 3, 4, 5];
-const winPattern3 = [6, 7, 8];
-// Win Patterns 1-3 handle horizontal wins
-const winPattern4 = [0, 3, 6];
-const winPattern5 = [1, 4, 7];
-const winPattern6 = [2, 5, 8];
-// Win Patterns 4-6 handle vertical wins
-const winPattern7 = [0,4,8];
-const winPattern8 = [2,4,6];
-// Win Patterns 7 and 8 handle diagonal wins
+//defines the 8 winning patterns, nested array
+const winningPattern = [ [ 0, 1, 2], [ 3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ]; 
 
 // const board = [ sq0, sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8 ] //an array corresponding to the browser board?
 /*---------------------------- Variables (state) ----------------------------*/
 
-let isWinner = null; //this variable will be updated by checkForWinner function
-// this variable will be used to control the flow of the game (comparison)
+let isWinner; //this variable will be updated by checkForWinner function
+let board = []; 
 let playerTurn = null; //this variable will be initialized by initialize function()
-let boardState = [];
-
 
 
 /*------------------------ Cached Element References ------------------------*/
- const sq0 = document.getElementById("sq0");
+ const sq0 = document.getElementById("sq0");    //connect html grid areas to javascript via cached elememt references
  const sq1 = document.getElementById("sq1");
  const sq2 = document.getElementById("sq2");
  const sq3 = document.getElementById("sq3");
@@ -42,67 +30,97 @@ let boardState = [];
  const sq6 = document.getElementById("sq6");
  const sq7 = document.getElementById("sq7");
  const sq8 = document.getElementById("sq8");
- 
- const messageOutput = document.getElementById('message');
+
+ const squares = [sq0, sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8]; //create array of cached element references for more concise access to grid areas
+ const messageOutput = document.getElementById('message'); //cached reference
 /*----------------------------- Event Listeners -----------------------------*/
 
-// This is where you should put the event listener
-// for a mouse-click
+document.querySelector('.board').addEventListener('click', handleClick)
+//document.querySelector('reset').addEventListener('click', initialize)
 
-/*-------------------------------- Functions --------------------------------*/
-
-//function to randomly decide which player will go first
-function decideTurn1() {
-    let turn = Math.floor(Math.random() * 2);
-    if (turn !== 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
+/*-------------------------------- Functions -------------------FUUUUUUCCCKCKK-------------*/
 
 // Initialization function: decides first turn, updates player, initializes board state
 function initialize() {
+    messageOutput.innerHTML = "Let's Play Tic-Tac-Toe!";
     isWinner = null;
-    messageOutput.textContent = "Let's Play Tic-Tac-Toe! Click anywhere to see who goes first."
-    document.body.addEventListener('click', (e) =>{
-        if ((decideTurn1())) {
-            messageOutput.textContent = "Player 1 (X) goes first";
-            playerTurn = 1;
-        } else {
-            messageOutput.textContent = "Player 2 (O) goes first";
-            playerTurn = -1;
-        }
-    })
-    boardState = [null, null, null, null, null, null, null, null, null] 
-} 
-    
-
-function onClick() {
-    document.board.addEventListener('click', (element) => {
-        //make element color of clicker
-    })
+    board = [null, null, null, null, null, null, null, null, null];
+    playerTurn = 1;
+    render();
 }
 
-// document.body.addEventListener('click', (e)=> {
-//     let audioVar = new Audio(`/audio/${e.target.id}.mp3`)
-//     audioVar.volume = 0.2;
-//     audioVar.play()
-// })
+function changeColor(element, index) {  
+    squares[index].style.backgroundColor = colors[element];
+}
 
+function render() {
+    board.forEach((element, index) => { 
+        changeColor(element, index);
+    })
+//     if (isWinner) {
+//         if (isWinner === 1) {
+//             messageOutput.innerHTML = "Congratulations Player X! You Won!";
+//         }  else if (isWinner === -1) {
+//             messageOutput.innerHTML = "Congratulations Player O! You Won!";
+//         } else {
+//             messageOutput.innerHTML = "No Winner!";
+//         }
+//     }
+}
+//   
 
-//function checkForWinner {
-    
-// Checks the current state of the board for
+function checkIndex(board, index) {
+    if( board[index+1] === board[index+2] === board[index+3]){
+         return (board[index] * 3);
+    } else if (board[index] === board[index+3] === board[index+6]) {
+        return (board[index] * 3);
+    } else if (board[index] === board[index+4] === board[index+8]) {
+        return (board[index] * 3);
+    } else if (board[index] === board[index+2] === board[index+4]) {
+        return (board[index] * 3);
+    } else {
+        return 0;
+    }
+}
 
-    //return isWinner;
-//} //this function will check for a winner by
+function getWinner() {
+    let winInt = null;
+    board.forEach((element, index) => {
+        winInt = checkIndex(element, index);
+            if (winInt === 3) {
+                return 1;
+            } else if (winInt === -3) {
+                return -1;
+            } else {
+                return null;
+            }
 
+    })
 
-// Render function:
-// Displays the current state of the board
-// on the page, updating the elements to reflect
-// either X or O depending on whose turn it is
+}
 
-initialize()
-console.log(boardState)
+function handleClick(click) {
+    for(let i = 0; i <board.length; i++){
+        if (i == click.target.id.replace('sq', '')){
+            if(board[i] != null) {
+                messageOutput.innerHTML = 'Try a different square!';
+                return;
+            } else {
+                board[i] = playerTurn
+                    if(playerTurn === 1) {
+                        squares[i].innerHTML = 'X';
+                    }
+                    else {
+                        squares[i].innerHTML = 'O';
+                    }
+               playerTurn *= -1;
+               isWinner = getWinner();
+               render();
+               
+            }
+
+        }
+    }
+}
+   
+initialize();
