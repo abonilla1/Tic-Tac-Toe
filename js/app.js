@@ -33,32 +33,31 @@ let playerTurn = null; //this variable will be initialized by initialize functio
  const messageOutput = document.getElementById('message'); //cached reference
 /*----------------------------- Event Listeners -----------------------------*/
 
-document.querySelector('.board').addEventListener('click', handleClick)
-
+document.querySelector('.board').addEventListener('click', handleClick)   //event listeners to handle click
+document.getElementById('reset').addEventListener('click', initialize)    // on board and reset button
 
 /*-------------------------------- Functions -------------------------------*/
 
 // Initialization function: decides first turn, updates player, initializes board state
 function initialize() {
-    messageOutput.innerHTML = "Let's Play Tic-Tac-Toe!";
     isWinner = null;
-    board = [null, null, null, null, null, null, null, null, null];
+    board = [null, null, null, null, null, null, null, null, null];  //initialize null board to correspond with colors object
     playerTurn = 1;
-    squares.forEach((idx) => {idx.innerHTML = ' ';})
+    squares.forEach((idx) => {idx.innerHTML = ' ';})  //reset inner html on board
     render();
-    stopConfetti();
+    confetti.stop()  //stop confetti drop if previous game 
 }
 
 function changeColor(element, index) {  
     squares[index].style.backgroundColor = colors[element];
-}
+}  //helperfunction for render uses the squares array of cached element references (will initialize to grey)
 
 function render() {
     board.forEach((element, index) => { 
         changeColor(element, index);
     });
     if (isWinner === 'T') {
-        messageOutput.innerHTML = "CaTs GaMe!";
+        messageOutput.innerHTML = "🐈 🐈 CaTs GaMe! 🐈 🐈";
     }  
     else if (isWinner) {
         messageOutput.innerHTML = `Congrats ${colors[isWinner].toUpperCase()} You Won!`;
@@ -69,34 +68,8 @@ function render() {
     }
 }
 
-//   
-
-// function checkIndex(board, index) {
-//     if( board[index+1] === board[index+2] === board[index+3]){
-//          return (board[index]);
-//     } else if (board[index] === board[index+3] === board[index+6]) {
-//         return (board[index]);
-//     } else if (board[index] === board[index+4] === board[index+8]) {
-//         return (board[index]);
-//     } else if (board[index] === board[index+2] === board[index+4]) {
-//         return (board[index]);
-//     } else {
-//         return 0;
-//     }
-// }
-
 function getWinner() {
     for (let i = 0; i < winningPattern.length; i++){
-    // let winInt = null;
-    // board.forEach((element, index) => {
-    //     winInt = checkIndex(element, index);
-    //         if (winInt === 3) {
-    //             return 1;
-    //         } else if (winInt === -3) {
-    //             return -1;
-    //         } else {
-    //             return null;
-    //         }
         if (Math.abs(board[0] + board[1] + board[2]) === 3) return board[0];
         if (Math.abs(board[3] + board[4] + board[5]) === 3) return board[3];
         if (Math.abs(board[6] + board[7] + board[8]) === 3) return board[6];
@@ -105,17 +78,31 @@ function getWinner() {
         if (Math.abs(board[2] + board[5] + board[8]) === 3) return board[2];
         if (Math.abs(board[0] + board[4] + board[8]) === 3) return board[0];
         if (Math.abs(board[2] + board[4] + board[6]) === 3) return board[2];
+        // if (board[0] === board[1] === board[2]) return board[0];
+        // if (board[3] === board[4] === board[5]) return board[5]; This is the win logic I came up with
+        // if (board[6] === board[7] === board[8]) return board[7];
+        // if (board[0] === board[3] === board[6]) return board[3]; 
+        // if (board[1] === board[4] === board[7]) return board[4];
+        // if (board[2] === board[5] === board[8]) return board[2];
+        // if (board[0] === board[4] === board[8]) return board[8];
+        // if (board[2] === board[4] === board[6]) return board[6]; 
         if (board.includes(null)) return null;
-        return 'T';
-    }
-}
+        return 'T';    
+    }       
+}       
+        
+    /* My check win logic that I wrote was very similar in logic to the solution, basically if the 
+    values at the board index in the win pattern add to 3 or -3 then declare a winner based on 3/-3 1/-1
+    however my logic required a helper function and didn't quite work so I used the solution code because the thought process was the same  */ 
+
+
 
 function handleClick(click) {
     for(let i = 0; i <board.length; i++){
-        if (i == click.target.id.replace('sq', '')){
+        if (i == click.target.id.replace('sq', '')){ //this is type coercion to check if the index is the same as the clicked square
             if(board[i] != null) {
                 messageOutput.innerHTML = 'Try a different square!';
-                return;
+                return;  //if the square is not null (i.e. already clicked and has a value, function returns and updates user)
             } else {
                 board[i] = playerTurn
                     if(playerTurn === 1) {
@@ -126,13 +113,11 @@ function handleClick(click) {
                     }
                playerTurn *= -1;
                isWinner = getWinner();
-               render();
-               
+               render();    
             }
-
         }
     }
 }
    
 initialize();
-document.getElementById('reset').addEventListener('click', initialize)
+
