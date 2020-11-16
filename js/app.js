@@ -70,32 +70,18 @@ function render() {
 
 function getWinner() {
     for (let i = 0; i < winningPattern.length; i++){
-        if (Math.abs(board[0] + board[1] + board[2]) === 3) return board[0];
-        if (Math.abs(board[3] + board[4] + board[5]) === 3) return board[3];
-        if (Math.abs(board[6] + board[7] + board[8]) === 3) return board[6];
-        if (Math.abs(board[0] + board[3] + board[6]) === 3) return board[0];
-        if (Math.abs(board[1] + board[4] + board[7]) === 3) return board[1];
-        if (Math.abs(board[2] + board[5] + board[8]) === 3) return board[2];
-        if (Math.abs(board[0] + board[4] + board[8]) === 3) return board[0];
-        if (Math.abs(board[2] + board[4] + board[6]) === 3) return board[2];
-        // if (board[0] === board[1] === board[2]) return board[0];
-        // if (board[3] === board[4] === board[5]) return board[5]; This is the win logic I came up with
-        // if (board[6] === board[7] === board[8]) return board[7];
-        // if (board[0] === board[3] === board[6]) return board[3]; 
-        // if (board[1] === board[4] === board[7]) return board[4];
-        // if (board[2] === board[5] === board[8]) return board[2];
-        // if (board[0] === board[4] === board[8]) return board[8];
-        // if (board[2] === board[4] === board[6]) return board[6]; 
+        if (board[0] === board[1] && board[0] === board[2]) return board[0];
+        if (board[3] === board[4] && board[3] === board[5]) return board[5]; 
+        if (board[6] === board[7] && board[7] === board[8]) return board[7];
+        if (board[0] === board[3] && board[2] === board[6]) return board[3]; 
+        if (board[1] === board[4] && board[1] === board[7]) return board[4];
+        if (board[2] === board[5] && board[2] === board[8]) return board[2];
+        if (board[0] === board[4] && board[4] === board[8]) return board[8];
+        if (board[2] === board[4] && board[2] === board[6]) return board[6]; 
         if (board.includes(null)) return null;
         return 'T';    
     }       
 }       
-        
-    /* My check win logic that I wrote was very similar in logic to the solution, basically if the 
-    values at the board index in the win pattern add to 3 or -3 then declare a winner based on 3/-3 1/-1
-    however my logic required a helper function and didn't quite work so I used the solution code because the thought process was the same  */ 
-
-
 
 function handleClick(click) {
     for(let i = 0; i <board.length; i++){
